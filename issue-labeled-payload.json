@@ -1,0 +1,25 @@
+{
+    "action": "labeled",
+    "issue": {
+        "body": "testbody",
+        "labels": [
+            {
+                "name": "testlabel1"
+            },
+            {
+                "name": "testlabel2"
+            },
+            {
+                "name": "testlabelprefix/repo"
+            }
+        ],
+        "number": 1,
+        "title": "testtitle",
+        "user": {
+            "login": "testuser"
+        }
+    },
+    "label": {
+        "name": "testlabelprefix/repo"
+    }
+}

@@ -1,0 +1,78 @@
+name: 'Migrate Issue'
+author: 'Brian Flad'
+description: 'Migrate an issue by opening a new issue in target repository with the source issue description and closing the issue in source repository'
+
+branding:
+  color: 'gray-dark'
+  icon: 'move'
+
+inputs:
+  source-issue-comment:
+    description: 'Comment to leave on source issue. If empty, no comment is left. The `{target-issue-url}` placeholder can be used to inject the opened issue URL.'
+    required: false
+    default: This issue has been migrated to {target-issue-url}.
+  source-issue-lock:
+    description: 'Whether to lock the source issue.'
+    required: false
+    default: 'false'
+  source-issue-number:
+    description: 'Number of source issue.'
+    required: false
+    default: ${{ github.event.issue.number }}
+  source-issue-only-label-names:
+    description: 'Names of source issue labels that must be present to trigger migration. Multiple values can be configured with newlines.'
+    required: false
+  source-issue-only-label-prefixes:
+    description: 'Name prefixes of source issue labels that must be present to trigger migration. Multiple values can be configured with newlines.'
+    required: false
+  source-issue-skip-label-names:
+    description: 'Names of source issue labels that will skip migration if present. Multiple values can be configured with newlines.'
+    required: false
+  source-issue-skip-label-prefixes:
+    description: 'Name prefixes of source issue labels that will skip migration if present. Multiple values can be configured with newlines.'
+    required: false
+  source-repository-github-token:
+    description: 'GitHub token to perform actions on source repository.'
+    required: false
+    default: ${{ github.token }}
+  target-issue-header:
+    description: 'Header text to add to target issue description.'
+    required: false
+    default: |
+      _This issue was originally opened by @${{ github.event.issue.user.login }} in ${{ github.event.issue.html_url }} and has been migrated to this repository. The original issue description is below._
+
+      ---
+  target-repository-github-token:
+    description: 'GitHub token to perform actions on target repository.'
+    required: true
+  target-repository-name:
+    description: 'Name of target repository. Conflicts with `target-repository-name-prefix`.'
+    required: false
+  target-repository-name-prefix:
+    description: 'Name prefix of target repository. Conflicts with `target-repository-name`. Uses `target-repository-name-prefix-label-name` and `target-repository-name-prefix-label-prefix` to create full name.'
+    required: false
+  target-repository-name-prefix-label-name:
+    description: 'Name of label to determine target repository name. Used with `target-repository-name-prefix` and `target-repository-name-prefix-label-prefix` to create full name.'
+    required: false
+    default: ${{ github.event.label.name }}
+  target-repository-name-prefix-label-prefix:
+    description: 'Prefix to remove from label to determine target repository name. Used with `target-repository-name-prefix` and `target-repository-name-prefix-label-name` to create full name.'
+    required: false
+  target-repository-owner:
+    description: 'Owner of target repository.'
+    required: false
+    default: ${{ github.repository_owner }}
+
+outputs:
+  target-issue-number:
+    description: 'Issue number opened in target repository.'
+  target-issue-url:
+    description: 'URL of the issue opened in target repository.'
+  target-repository-name:
+    description: 'Name of target repository.'
+  target-repository-owner:
+    description: 'Owner of target repository.'
+
+runs:
+  using: 'node12'
+  main: 'dist/index.js'
