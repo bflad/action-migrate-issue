@@ -313,15 +313,15 @@ ${sourceIssueBody}`,
         await expect(scope.isDone()).toBeTruthy();
     });
 
-    test('retries abuse limit errors', async () => {
+    test('retries secondary rate limit errors', async () => {
         process.env['GITHUB_EVENT_PATH'] = path.join(__dirname, 'issue-labeled-payload.json');
         process.env['INPUT_TARGET-REPOSITORY-NAME'] = targetRepoName;
 
         const scope = nock('https://api.github.com')
             .post(`/repos/${targetRepo}/issues`, mockIssueOpenedRequest)
             .reply(403, {
-                message: "You have triggered an abuse detection mechanism and have been temporarily blocked from content creation. Please retry your request again later.",
-                documentation_url: "https://docs.github.com/rest/overview/resources-in-the-rest-api#abuse-rate-limits"
+                message: "You have exceeded a secondary rate limit and have been temporarily blocked from content creation. Please retry your request again later.",
+                documentation_url: "https://docs.github.com/rest/overview/resources-in-the-rest-api#secondary-rate-limits"
             })
             .post(`/repos/${targetRepo}/issues`, mockIssueOpenedRequest)
             .reply(201, mockIssueOpenedResponse)
