@@ -1,6 +1,6 @@
 {
   "name": "action-migrate-issue",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "GitHub Action to Migrate an Issue",
   "main": "index.js",
   "jest": {
